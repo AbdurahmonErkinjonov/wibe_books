@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" role="img" aria-label="WIBE Books logo">
+  <defs>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f4a2f"/>
+      <stop offset="100%" stop-color="#4b7f4f"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b78f37"/>
+      <stop offset="100%" stop-color="#d4b54d"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e5533"/>
+      <stop offset="100%" stop-color="#b7933f"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(40,20)">
+    <path d="M0 20 L40 0 L40 140 L0 120 Z" fill="url(#greenGrad)"/>
+    <path d="M40 0 L80 20 L80 160 L40 140 Z" fill="url(#greenGrad)" opacity=".9"/>
+    <path d="M80 20 L120 0 L120 140 L80 160 Z" fill="url(#goldGrad)" opacity=".95"/>
+    <path d="M120 0 L160 20 L160 160 L120 140 Z" fill="url(#goldGrad)"/>
+    <path d="M27 17 L72 0" stroke="#fff" stroke-width="4" opacity=".15"/>
+    <path d="M59 0 L107 20" stroke="#fff" stroke-width="4" opacity=".12"/>
+  </g>
+  <text x="200" y="84" font-family="'Playfair Display', serif" font-size="52" font-weight="800" fill="url(#textGrad)">WIBE</text>
+  <text x="200" y="136" font-family="'DM Sans', sans-serif" font-size="24" font-weight="700" fill="#2e3b2f">BOOKS</text>
+</svg>
