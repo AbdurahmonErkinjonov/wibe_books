@@ -362,7 +362,7 @@
           <div class="book-author">{{ book.author }}</div>
           <div class="book-footer">
             <div class="book-price">{{ book.price }}<small>so'm</small></div>
-            <a href="/book/{{ book.id }}/" class="btn-detail" onclick="event.stopPropagation()">Ko'rish →</a>
+            <button class="btn-detail" onclick="event.stopPropagation(); addToCart({{ book.id }})">Savatga qo'shish</button>
           </div>
         </div>
       </div>

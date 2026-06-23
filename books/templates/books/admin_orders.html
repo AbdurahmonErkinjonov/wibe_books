@@ -1,0 +1,412 @@
+{% extends 'books/base.html' %}
+{% load static %}
+{% block title %}Buyurtmalar — Admin Panel{% endblock %}
+
+{% block extra_head %}
+<style>
+.admin-page { padding: 96px 0 80px; min-height: 100vh; }
+.admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 96px); }
+
+.sidebar {
+  background: var(--ink); color: white;
+  padding: 40px 24px;
+  position: sticky; top: 72px;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+}
+.sidebar-logo { margin-bottom: 8px; }
+.sidebar-logo img { height: 52px; width: auto; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+.sidebar-sub { font-size: .8rem; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+.sidebar-menu { list-style: none; }
+.sidebar-item { margin-bottom: 4px; }
+.sidebar-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 12px;
+  color: rgba(255,255,255,.65);
+  text-decoration: none; font-size: .9rem; font-weight: 500;
+  transition: all .2s; cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left;
+}
+.sidebar-link:hover { background: rgba(255,255,255,.08); color: white; }
+.sidebar-link.active { background: var(--gold); color: var(--ink); }
+.sidebar-link .icon { font-size: 1.1rem; }
+.sidebar-divider { height: 1px; background: rgba(255,255,255,.1); margin: 20px 0; }
+
+.admin-main { padding: 40px; background: #f5f5f0; }
+
+.section-card {
+  background: white; border-radius: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 32px; overflow: hidden;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .75rem; background: rgba(0,0,0,.06);
+  color: #666; padding: 3px 10px; border-radius: 20px; font-weight: 500;
+}
+
+/* Order Cards */
+.order-cards { padding: 20px 28px; }
+
+.order-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: all .3s;
+}
+.order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+
+.order-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+}
+.order-id {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700; font-size: 1.1rem;
+}
+.order-status {
+  padding: 5px 14px; border-radius: 20px;
+  font-size: .78rem; font-weight: 600;
+}
+.order-status.pending { background: rgba(201,168,76,.15); color: #b8942b; }
+.order-status.accepted { background: rgba(74,124,89,.15); color: var(--sage); }
+.order-status.rejected { background: rgba(184,76,43,.12); color: var(--rust); }
+
+.order-card-body { padding: 20px 24px; }
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.order-info-item { }
+.order-info-label {
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase;
+  color: #aaa; margin-bottom: 4px;
+}
+.order-info-value {
+  font-size: .92rem; font-weight: 500;
+  color: var(--ink);
+}
+
+.order-items-list {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+.order-items-title {
+  font-size: .8rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: #aaa; margin-bottom: 10px;
+}
+.order-item-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0;
+  font-size: .9rem;
+}
+.order-item-row + .order-item-row { border-top: 1px solid #f8f8f8; }
+.order-item-qty {
+  background: rgba(0,0,0,.06);
+  padding: 2px 8px; border-radius: 8px;
+  font-size: .78rem; font-weight: 600;
+  color: #666;
+}
+
+.order-total-row {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+.order-total-label { font-weight: 500; color: #888; }
+.order-total-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 900;
+  color: var(--ink);
+}
+
+.order-actions {
+  display: flex; gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+}
+.btn-accept {
+  padding: 10px 28px; border-radius: 50px; border: none;
+  background: var(--sage); color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .875rem; font-weight: 600;
+  cursor: pointer; transition: all .25s;
+}
+.btn-accept:hover { background: #3d6a4a; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(74,124,89,.4); }
+
+.btn-reject {
+  padding: 10px 28px; border-radius: 50px; border: none;
+  background: var(--rust); color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .875rem; font-weight: 600;
+  cursor: pointer; transition: all .25s;
+}
+.btn-reject:hover { background: #9a3b22; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(184,76,43,.4); }
+
+.btn-accept:disabled, .btn-reject:disabled {
+  opacity: .4; cursor: not-allowed; transform: none; box-shadow: none;
+}
+
+.order-empty {
+  text-align: center; padding: 60px 20px;
+  color: #aaa;
+}
+.order-empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.order-empty h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--ink); margin-bottom: 8px; }
+
+.stat-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px; margin-bottom: 40px;
+}
+.stat-card {
+  background: white; border-radius: 20px; padding: 28px;
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--rust));
+}
+.stat-card-icon { font-size: 2rem; margin-bottom: 12px; }
+.stat-card-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem; font-weight: 900; color: var(--ink);
+}
+.stat-card-label { font-size: .82rem; color: #888; margin-top: 4px; }
+
+@media(max-width:900px) {
+  .admin-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .sidebar-menu { display: flex; gap: 8px; }
+  .order-info-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+<div class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'images/logo.svg' %}" alt="Logo">
+    </div>
+    <div class="sidebar-sub">KitobDunyo boshqaruvi</div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <a href="/" class="sidebar-link"><span class="icon">&#x1F3E0;</span> Bosh sahifa</a>
+      </li>
+      <li class="sidebar-item">
+        <a href="{% url 'admin_login' %}" class="sidebar-link"><span class="icon">&#x1F4CB;</span> Dashboard</a>
+      </li>
+      <li class="sidebar-item">
+        <span class="sidebar-link active"><span class="icon">&#x1F4E6;</span> Buyurtmalar</span>
+      </li>
+    </ul>
+    <div style="margin-top: 20px;">
+      <a href="{% url 'admin_logout' %}" class="sidebar-link" style="justify-content:center; background: rgba(255,255,255,.08);">
+        <span class="icon">&#x1F6AA;</span> Chiqish
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x1F4E6;</div>
+        <div class="stat-card-val">{{ orders.count }}</div>
+        <div class="stat-card-label">Jami buyurtmalar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x23F3;</div>
+        <div class="stat-card-val" id="pendingCount">0</div>
+        <div class="stat-card-label">Kutilmoqda</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x2705;</div>
+        <div class="stat-card-val" id="acceptedCount">0</div>
+        <div class="stat-card-label">Qabul qilingan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x274C;</div>
+        <div class="stat-card-val" id="rejectedCount">0</div>
+        <div class="stat-card-label">Rad etilgan</div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          Buyurtmalar
+          <span class="section-badge">{{ orders.count }} ta</span>
+        </div>
+      </div>
+      <div class="order-cards" id="ordersContainer">
+        {% for order in orders %}
+        <div class="order-card" id="order-{{ order.id }}">
+          <div class="order-card-header">
+            <div class="order-id">#{{ order.id }} — {{ order.customer_name }}</div>
+            <div class="order-status {{ order.status }}">{{ order.get_status_display }}</div>
+          </div>
+          <div class="order-card-body">
+            <div class="order-info-grid">
+              <div class="order-info-item">
+                <div class="order-info-label">Telefon</div>
+                <div class="order-info-value">{{ order.phone }}</div>
+              </div>
+              {% if order.extra_phone %}
+              <div class="order-info-item">
+                <div class="order-info-label">Qo'shimcha telefon</div>
+                <div class="order-info-value">{{ order.extra_phone }}</div>
+              </div>
+              {% endif %}
+              {% if order.telegram_username %}
+              <div class="order-info-item">
+                <div class="order-info-label">Telegram</div>
+                <div class="order-info-value">{{ order.telegram_username }}</div>
+              </div>
+              {% endif %}
+              <div class="order-info-item">
+                <div class="order-info-label">To'lov</div>
+                <div class="order-info-value">{{ order.get_payment_method_display }}</div>
+              </div>
+              <div class="order-info-item">
+                <div class="order-info-label">Yetkazish</div>
+                <div class="order-info-value">{{ order.get_delivery_method_display }}</div>
+              </div>
+              {% if order.delivery_address %}
+              <div class="order-info-item">
+                <div class="order-info-label">Manzil</div>
+                <div class="order-info-value">{{ order.delivery_address }}</div>
+              </div>
+              {% endif %}
+              <div class="order-info-item">
+                <div class="order-info-label">Sana</div>
+                <div class="order-info-value">{{ order.created_at|date:"d.m.Y H:i" }}</div>
+              </div>
+            </div>
+
+            <div class="order-items-list">
+              <div class="order-items-title">Buyurtma tarkibi</div>
+              {% for item in order.items.all %}
+              <div class="order-item-row">
+                <span class="order-item-qty">x{{ item.quantity }}</span>
+                <span>{{ item.book.title }}</span>
+                <span style="margin-left:auto; font-weight:600;">{{ item.price }} so'm</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="order-total-row">
+            <div class="order-total-label">Jami summa</div>
+            <div class="order-total-val">{{ order.total_price }} so'm</div>
+          </div>
+
+          {% if order.status == 'pending' %}
+          <div class="order-actions">
+            <button class="btn-accept" onclick="acceptOrder({{ order.id }})">&#x2705; Qabul qilish</button>
+            <button class="btn-reject" onclick="rejectOrder({{ order.id }})">&#x274C; Rad etish</button>
+          </div>
+          {% endif %}
+        </div>
+        {% empty %}
+        <div class="order-empty">
+          <div class="order-empty-icon">&#x1F4E6;</div>
+          <h3>Hali buyurtmalar yo'q</h3>
+          <p>Foydalanuvchilar buyurtma berganda bu yerda ko'rinadi</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const CSRF_TOKEN = '{{ csrf_token }}';
+
+// Count stats
+function updateStats() {
+  const cards = document.querySelectorAll('.order-card');
+  let pending = 0, accepted = 0, rejected = 0;
+  cards.forEach(card => {
+    const status = card.querySelector('.order-status');
+    if (status.classList.contains('pending')) pending++;
+    else if (status.classList.contains('accepted')) accepted++;
+    else if (status.classList.contains('rejected')) rejected++;
+  });
+  document.getElementById('pendingCount').textContent = pending;
+  document.getElementById('acceptedCount').textContent = accepted;
+  document.getElementById('rejectedCount').textContent = rejected;
+}
+updateStats();
+
+async function acceptOrder(id) {
+  try {
+    const res = await fetch(`/api/admin/orders/${id}/accept/`, {
+      method: 'POST',
+      headers: {'X-CSRFToken': CSRF_TOKEN, 'Content-Type': 'application/json'}
+    });
+    const data = await res.json();
+    if (data.success) {
+      const card = document.getElementById(`order-${id}`);
+      const statusEl = card.querySelector('.order-status');
+      statusEl.className = 'order-status accepted';
+      statusEl.textContent = 'Qabul qilindi';
+      const actionsEl = card.querySelector('.order-actions');
+      if (actionsEl) actionsEl.remove();
+      updateStats();
+      showToast(data.message, 'success');
+    } else {
+      showToast(data.error, 'error');
+    }
+  } catch(e) { showToast('Xatolik!', 'error'); }
+}
+
+async function rejectOrder(id) {
+  try {
+    const res = await fetch(`/api/admin/orders/${id}/reject/`, {
+      method: 'POST',
+      headers: {'X-CSRFToken': CSRF_TOKEN, 'Content-Type': 'application/json'}
+    });
+    const data = await res.json();
+    if (data.success) {
+      const card = document.getElementById(`order-${id}`);
+      const statusEl = card.querySelector('.order-status');
+      statusEl.className = 'order-status rejected';
+      statusEl.textContent = 'Rad etildi';
+      const actionsEl = card.querySelector('.order-actions');
+      if (actionsEl) actionsEl.remove();
+      updateStats();
+      showToast(data.message, 'success');
+    } else {
+      showToast(data.error, 'error');
+    }
+  } catch(e) { showToast('Xatolik!', 'error'); }
+}
+</script>
+{% endblock %}

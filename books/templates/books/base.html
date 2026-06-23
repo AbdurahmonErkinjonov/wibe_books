@@ -231,6 +231,298 @@
     background: #9a3b22;
     transform: translateY(-2px);
   }
+
+  /* ===== CART NAV BUTTON ===== */
+  .cart-btn {
+    position: relative;
+    padding: 9px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: .875rem;
+    font-weight: 500;
+    transition: all .25s;
+    border: 1.5px solid var(--gold);
+    background: rgba(201,168,76,.08);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cart-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .cart-badge {
+    position: absolute;
+    top: -6px; right: -6px;
+    background: var(--rust);
+    color: white;
+    font-size: .7rem;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--cream);
+    transition: transform .3s;
+  }
+  .cart-badge.bump { animation: badgeBump .3s ease; }
+  @keyframes badgeBump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  /* ===== CART MODAL ===== */
+  .cart-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(13,13,20,0.6);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0;
+  }
+  .cart-modal.active { display: flex; }
+
+  .cart-panel {
+    width: 440px;
+    max-width: 100vw;
+    height: 100vh;
+    background: white;
+    box-shadow: -20px 0 60px rgba(0,0,0,.25);
+    display: flex;
+    flex-direction: column;
+    animation: slideInRight .35s cubic-bezier(.25,.8,.25,1);
+  }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+
+  .cart-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cart-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .cart-close:hover {
+    background: var(--ink); color: white; border-color: var(--ink);
+  }
+
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px;
+  }
+
+  .cart-item {
+    display: flex; gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+  }
+  .cart-item:last-child { border-bottom: none; }
+
+  .cart-item-img {
+    width: 60px; height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .cart-item-placeholder {
+    width: 60px; height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--rust));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: .95rem;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cart-item-author { font-size: .8rem; color: #888; margin-bottom: 8px; }
+  .cart-item-price {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 6px;
+  }
+  .qty-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-size: .85rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .qty-btn:hover {
+    border-color: var(--ink);
+    background: var(--ink); color: white;
+  }
+  .qty-num { font-weight: 700; font-size: .9rem; min-width: 20px; text-align: center; }
+
+  .cart-item-remove {
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1px solid rgba(184,76,43,.2);
+    background: rgba(184,76,43,.06);
+    color: var(--rust);
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .cart-item-remove:hover {
+    background: var(--rust); color: white;
+  }
+
+  .cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #aaa;
+  }
+  .cart-empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+  .cart-empty h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .cart-footer {
+    padding: 20px 28px;
+    border-top: 1px solid var(--border);
+    background: #fafafa;
+  }
+  .cart-total {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .cart-total-label { font-size: .9rem; color: #888; }
+  .cart-total-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--ink);
+  }
+  .cart-order-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, var(--gold), var(--rust));
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 8px 24px rgba(201,168,76,.35);
+  }
+  .cart-order-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(201,168,76,.5);
+  }
+  .cart-order-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ===== ORDER FORM MODAL ===== */
+  .order-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 2500;
+    background: rgba(13,13,20,0.6);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .order-modal.active { display: flex; }
+
+  .order-form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 60px 120px rgba(0,0,0,.25);
+    animation: modalIn .4s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .order-form-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .payment-options, .delivery-options {
+    display: flex; gap: 10px;
+  }
+  .payment-options label, .delivery-options label {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: .9rem;
+    transition: all .2s;
+    background: white;
+  }
+  .payment-options input, .delivery-options input {
+    display: none;
+  }
+  .payment-options input:checked + span,
+  .delivery-options input:checked + span {
+    color: var(--ink);
+  }
+  .payment-options label:has(input:checked),
+  .delivery-options label:has(input:checked) {
+    border-color: var(--gold);
+    background: rgba(201,168,76,.08);
+    color: var(--ink);
+  }
+
+  .location-field {
+    display: none;
+    margin-top: 12px;
+  }
+  .location-field.show { display: block; }
 </style>
 {% block extra_head %}{% endblock %}
 </head>
@@ -242,20 +534,290 @@
   </a>
   <div class="nav-links">
     <a href="/" class="nav-btn ghost">Bosh sahifa</a>
+    <button class="cart-btn" onclick="openCart()">
+      Savatcham
+      <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+    </button>
   </div>
 </nav>
 
 {% block content %}{% endblock %}
 
+<!-- ===== CART PANEL ===== -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-panel">
+    <div class="cart-header">
+      <h2>Savatcham</h2>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span class="cart-total-label">Jami:</span>
+        <span class="cart-total-price" id="cartTotal">0 so'm</span>
+      </div>
+      <button class="cart-order-btn" id="cartOrderBtn" onclick="openOrderForm()" disabled>Buyurtma berish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ORDER FORM MODAL ===== -->
+<div class="order-modal" id="orderModal">
+  <div class="order-form-card">
+    <h2>Buyurtma Ma'lumotlari</h2>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Ismingiz *</label>
+        <input type="text" id="orderName" placeholder="Abdulla Qodiriy" required>
+      </div>
+      <div class="form-group">
+        <label>Telefon raqam *</label>
+        <input type="tel" id="orderPhone" placeholder="+998 90 123 45 67" required>
+      </div>
+      <div class="form-group">
+        <label>Qo'shimcha telefon</label>
+        <input type="tel" id="orderExtraPhone" placeholder="+998 91 123 45 67">
+      </div>
+      <div class="form-group full">
+        <label>Telegram username</label>
+        <input type="text" id="orderTelegram" placeholder="@username">
+      </div>
+      <div class="form-group full">
+        <label>To'lov usuli *</label>
+        <div class="payment-options">
+          <label><input type="radio" name="payment" value="naqt" checked><span>Naqt</span></label>
+          <label><input type="radio" name="payment" value="karta"><span>Karta</span></label>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Etkazish usuli *</label>
+        <div class="delivery-options">
+          <label><input type="radio" name="delivery" value="yetkazish" checked onchange="toggleLocation()"><span>Yetkazib berish</span></label>
+          <label><input type="radio" name="delivery" value="olib_ketish" onchange="toggleLocation()"><span>Kelib olib ketish</span></label>
+        </div>
+      </div>
+      <div class="form-group full location-field show" id="locationField">
+        <label>Lokatsiya / Manzil *</label>
+        <textarea id="orderAddress" placeholder="Manzilingizni yozing..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="closeOrderForm()">Orqaga</button>
+      <button type="button" class="btn btn-primary" onclick="submitOrder()">Tasdiqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS MODAL ===== -->
+<div class="order-modal" id="successModal">
+  <div class="order-form-card" style="text-align:center; padding:50px 40px;">
+    <div style="font-size:4rem; margin-bottom:20px;" id="successIcon">&#x2705;</div>
+    <h2 style="justify-content:center; margin-bottom:16px;" id="successTitle">Buyurtma qabul qilindi!</h2>
+    <p style="color:#888; margin-bottom:32px; line-height:1.6;" id="successText">Buyurtmangiz tez orada ko'rib chiqiladi.</p>
+    <button class="btn btn-primary" onclick="closeSuccessModal()">OK</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
+const CSRF_TOKEN = '{{ csrf_token }}';
+
 function showToast(msg, type='success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'show ' + type;
   setTimeout(() => t.className = '', 3200);
 }
+
+/* ===== CART FUNCTIONS ===== */
+async function loadCart() {
+  try {
+    const res = await fetch('/api/cart/');
+    const data = await res.json();
+    renderCart(data);
+  } catch(e) {}
+}
+
+function renderCart(data) {
+  const container = document.getElementById('cartItems');
+  const badge = document.getElementById('cartBadge');
+  const totalEl = document.getElementById('cartTotal');
+  const orderBtn = document.getElementById('cartOrderBtn');
+  const count = data.items.reduce((s, i) => s + i.quantity, 0);
+
+  if (count > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = count;
+    orderBtn.disabled = false;
+  } else {
+    badge.style.display = 'none';
+    orderBtn.disabled = true;
+  }
+
+  totalEl.textContent = Number(data.total).toLocaleString('uz-UZ') + " so'm";
+
+  if (data.items.length === 0) {
+    container.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">&#x1F6D2;</div><h3>Savatcha bo\'sh</h3><p>Kitoblarni savatga qo\'shing</p></div>';
+    return;
+  }
+
+  container.innerHTML = data.items.map(item => `
+    <div class="cart-item">
+      ${item.cover_image
+        ? `<img src="${item.cover_image}" class="cart-item-img" alt="${item.title}">`
+        : `<div class="cart-item-placeholder">&#x1F4D6;</div>`
+      }
+      <div class="cart-item-info">
+        <div class="cart-item-title">${item.title}</div>
+        <div class="cart-item-author">${item.author}</div>
+        <div class="cart-item-price">${Number(item.price).toLocaleString('uz-UZ')} so'm</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.book_id})">O'chirish</button>
+    </div>
+  `).join('');
+}
+
+async function addToCart(bookId) {
+  try {
+    const res = await fetch('/api/cart/add/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF_TOKEN
+      },
+      body: JSON.stringify({ book_id: bookId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadCart();
+      const badge = document.getElementById('cartBadge');
+      badge.classList.remove('bump');
+      void badge.offsetWidth;
+      badge.classList.add('bump');
+    } else {
+      showToast(data.error, 'error');
+    }
+  } catch(e) {
+    showToast('Xatolik yuz berdi!', 'error');
+  }
+}
+
+async function removeFromCart(bookId) {
+  try {
+    const res = await fetch('/api/cart/remove/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF_TOKEN
+      },
+      body: JSON.stringify({ book_id: bookId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadCart();
+    }
+  } catch(e) {}
+}
+
+function openCart() {
+  document.getElementById('cartModal').classList.add('active');
+  loadCart();
+}
+
+function closeCart() {
+  document.getElementById('cartModal').classList.remove('active');
+}
+
+function openOrderForm() {
+  closeCart();
+  document.getElementById('orderModal').classList.add('active');
+}
+
+function closeOrderForm() {
+  document.getElementById('orderModal').classList.remove('active');
+}
+
+function toggleLocation() {
+  const val = document.querySelector('input[name="delivery"]:checked').value;
+  const field = document.getElementById('locationField');
+  if (val === 'yetkazish') {
+    field.classList.add('show');
+  } else {
+    field.classList.remove('show');
+  }
+}
+
+async function submitOrder() {
+  const name = document.getElementById('orderName').value.trim();
+  const phone = document.getElementById('orderPhone').value.trim();
+  const extraPhone = document.getElementById('orderExtraPhone').value.trim();
+  const telegram = document.getElementById('orderTelegram').value.trim();
+  const payment = document.querySelector('input[name="payment"]:checked').value;
+  const delivery = document.querySelector('input[name="delivery"]:checked').value;
+  const address = document.getElementById('orderAddress').value.trim();
+
+  if (!name) { showToast('Ismingizni kiriting!', 'error'); return; }
+  if (!phone) { showToast('Telefon raqamni kiriting!', 'error'); return; }
+  if (delivery === 'yetkazish' && !address) { showToast('Manzilni kiriting!', 'error'); return; }
+
+  try {
+    const res = await fetch('/api/orders/create/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF_TOKEN
+      },
+      body: JSON.stringify({
+        customer_name: name,
+        phone: phone,
+        extra_phone: extraPhone,
+        telegram_username: telegram,
+        payment_method: payment,
+        delivery_method: delivery,
+        delivery_address: address,
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      closeOrderForm();
+      document.getElementById('orderName').value = '';
+      document.getElementById('orderPhone').value = '';
+      document.getElementById('orderExtraPhone').value = '';
+      document.getElementById('orderTelegram').value = '';
+      document.getElementById('orderAddress').value = '';
+      document.getElementById('successTitle').textContent = 'Buyurtma qabul qilindi!';
+      document.getElementById('successText').textContent = 'Buyurtmangiz tez orada ko\'rib chiqiladi. Admin tomonidan tasdiqlanishi kutilmoqda.';
+      document.getElementById('successIcon').innerHTML = '&#x2705;';
+      document.getElementById('successModal').classList.add('active');
+      loadCart();
+    } else {
+      showToast(data.error, 'error');
+    }
+  } catch(e) {
+    showToast('Xatolik yuz berdi!', 'error');
+  }
+}
+
+function closeSuccessModal() {
+  document.getElementById('successModal').classList.remove('active');
+}
+
+// Close modals on overlay click
+document.getElementById('cartModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCart();
+});
+document.getElementById('orderModal').addEventListener('click', function(e) {
+  if (e.target === this) closeOrderForm();
+});
+document.getElementById('successModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSuccessModal();
+});
+
+// Load cart on page load
+loadCart();
 </script>
 
 {% block extra_js %}{% endblock %}
